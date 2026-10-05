@@ -1,0 +1,48 @@
+# ── Python ──────────────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.Python
+pip-log.txt
+
+# ── Model artefacts ─────────────────────────────────────────────────────────
+# streamverse_bundle.pkl (~90 KB) IS committed, so the project runs straight
+# after cloning. The other pickles the notebook writes are not needed here.
+backend/model/*.pkl
+!backend/model/streamverse_bundle.pkl
+
+# To keep the bundle out of the repo instead, uncomment this line and run
+#   git rm --cached backend/model/streamverse_bundle.pkl
+# backend/model/streamverse_bundle.pkl
+
+# ── Datasets ────────────────────────────────────────────────────────────────
+# Coursework data stays out of the repo. Remove these lines if you want the
+# annotated corpus published alongside the code.
+*.xlsx
+*.xls
+*.csv
+
+# ── Notebook output ─────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+streamverse_model/
+
+# ── Editors ─────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── macOS ───────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ── Logs and local scratch ──────────────────────────────────────────────────
+*.log
+.env
+.env.local

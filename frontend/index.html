@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F5F5FA" id="theme-color">
+<title>StreamVerse — Gujarati entertainment assistant</title>
+
+<script>
+  /* Set the theme before first paint, otherwise a dark-mode user sees a white flash. */
+  (function () {
+    try {
+      var saved = localStorage.getItem("streamverse-theme");
+      var theme = saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.dataset.theme = theme;
+      document.getElementById("theme-color").content = theme === "dark" ? "#0C0E1C" : "#F5F5FA";
+    } catch (e) {
+      document.documentElement.dataset.theme = "light";
+    }
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=Noto+Sans+Gujarati:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+
+<body>
+<a class="skip-link" href="#composer-input">Skip to the message box</a>
+
+<header class="masthead">
+  <div class="identity">
+    <h1 class="wordmark" translate="no">StreamVerse</h1>
+    <p class="tagline gu">ગુજરાતી મનોરંજન સહાયક</p>
+  </div>
+  <div class="masthead-right">
+    <p class="status" id="status" role="status">
+      <span class="status-dot" data-state="waiting" id="status-dot" aria-hidden="true"></span>
+      <span id="status-text">Connecting…</span>
+    </p>
+
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.6v2.1M12 19.3v2.1M4.3 4.3l1.5 1.5M18.2 18.2l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.3 19.7l1.5-1.5M18.2 5.8l1.5-1.5"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main class="stage">
+
+  <!-- ─────────────────────────── conversation ─────────────────────────── -->
+  <section class="conversation" aria-labelledby="conversation-heading">
+    <h2 class="sr-only" id="conversation-heading">Conversation</h2>
+
+    <div class="thread" id="thread" role="log" aria-live="polite" aria-relevant="additions">
+      <div class="opening" id="opening">
+        <p class="opening-ask gu">શું જોવું છે?</p>
+        <p class="opening-help">
+          Ask about movies, shows, music or podcasts. Write in Gujarati or English —
+          the reply always comes back in Gujarati.
+        </p>
+      </div>
+    </div>
+
+    <div class="suggestions" id="suggestions" hidden>
+      <p class="suggestions-label" id="suggestions-label">Try one of these</p>
+      <div class="chip-row" role="group" aria-labelledby="suggestions-label">
+        <button type="button" class="chip gu" data-fill="મને એક સારી ગુજરાતી ફિલ્મ સૂચવો.">મને એક સારી ગુજરાતી ફિલ્મ સૂચવો.</button>
+        <button type="button" class="chip gu" data-fill="નેટફ્લિક્સ પર સબટાઈટલ કેવી રીતે ચાલુ કરવા?">નેટફ્લિક્સ પર સબટાઈટલ કેવી રીતે ચાલુ કરવા?</button>
+        <button type="button" class="chip gu" data-fill="શાંત ગુજરાતી ગીતોની પ્લેલિસ્ટ સૂચવો.">શાંત ગુજરાતી ગીતોની પ્લેલિસ્ટ સૂચવો.</button>
+        <button type="button" class="chip gu" data-fill="ટેકનોલોજી વિશે સારો પોડકાસ્ટ કયો છે?">ટેકનોલોજી વિશે સારો પોડકાસ્ટ કયો છે?</button>
+        <button type="button" class="chip" data-fill="Which web series should I watch on Netflix?">Which web series should I watch on Netflix?</button>
+        <button type="button" class="chip" data-fill="How do I change auto-caption settings on YouTube?">How do I change auto-caption settings on YouTube?</button>
+      </div>
+    </div>
+
+    <form class="composer" id="composer" autocomplete="off">
+      <label class="sr-only" for="composer-input">Your question, in Gujarati or English</label>
+      <input
+        id="composer-input"
+        name="query"
+        type="text"
+        maxlength="500"
+        spellcheck="false"
+        placeholder="કંઈક પૂછો… or ask in English"
+        enterkeyhint="send">
+      <button type="submit" id="send" class="send">
+        <span class="send-label">Send</span>
+        <span class="spinner" aria-hidden="true"></span>
+      </button>
+    </form>
+    <p class="composer-note" id="composer-note"></p>
+  </section>
+
+  <!-- ──────────────────────────── reading panel ───────────────────────── -->
+  <aside class="reading" aria-labelledby="reading-heading">
+    <h2 class="reading-heading" id="reading-heading">How this was read</h2>
+
+    <dl class="facts">
+      <div class="fact">
+        <dt>Language detected</dt>
+        <dd id="fact-language">—</dd>
+      </div>
+      <div class="fact">
+        <dt>Words the model used</dt>
+        <dd id="fact-tokens" class="tokens">—</dd>
+      </div>
+    </dl>
+
+    <div class="ladder-block">
+      <h3 class="ladder-heading">Intent</h3>
+      <ol class="ladder" id="ladder"></ol>
+      <p class="close-call" id="close-call" hidden>
+        The top two intents are nearly tied here — treat this reading as unsettled.
+      </p>
+    </div>
+
+    <p class="caveat">
+      Scores are relative, not calibrated confidence. Naive&nbsp;Bayes assumes words are
+      independent, which inflates them. Read the ranking, not the number.
+    </p>
+  </aside>
+
+</main>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>

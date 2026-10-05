@@ -1,0 +1,17 @@
+# StreamVerse backend
+#
+# IMPORTANT: scikit-learn must match the version that created the pickle.
+# joblib pickles of sklearn estimators are not guaranteed to load across versions.
+#
+# In Colab, run:   import sklearn; print(sklearn.__version__)
+# Then pin it below, e.g.  scikit-learn==1.6.1
+#
+# After starting the server, open http://127.0.0.1:8000/api/health — it reports the
+# version actually in use here, so you can compare the two.
+
+fastapi
+uvicorn[standard]
+scikit-learn
+joblib
+numpy
+scipy
